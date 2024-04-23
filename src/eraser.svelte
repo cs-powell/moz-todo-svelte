@@ -3,7 +3,7 @@
 
     const dispatch = createEventDispatcher();
 
-	function sayClear() {
+	function sayErase() {
 		dispatch('message', {
 			text: 'Eraser'
 		});
@@ -11,7 +11,7 @@
 </script>
 
 <main>
-    <button on:click = {sayClear} id="button-element">erase mode</button>
+    <button on:click = {sayErase} id="button-element">erase mode</button>
 </main>
 
 <style>

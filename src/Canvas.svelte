@@ -2,18 +2,29 @@
 
 
 import { onMount } from 'svelte'
-import Eraser from "./eraser.svelte";
+    import Eraser from "./eraser.svelte";
+    import Clear from "./Clear.svelte";
 
     export let width = 800
 	export let height = 600
-	export let color = '#333'
-	export let backgroundColor = '#343'
+	export let color = '#fff'
+	let backgroundColor = '#343'
     export let lineWidth = 5;
     export let eraser = false;
 
     let context;
     let canvas;
     let isDragging;
+
+    function handleClearMessage(event) {
+			alert("Screen Cleared");
+			context.clearRect(0,0,canvas.width,canvas.height);
+	}
+
+ const HandleColor = event => {
+    alert("Handling Color");
+    context.strokeStyle = color;
+  };
 
     function setIsDragging(input){
         isDragging = input;
@@ -66,12 +77,45 @@ import Eraser from "./eraser.svelte";
   };
 
 
+  const  HandleEraseClick = event => {
+    if(eraser == true) {
+      setEraser(false);
+      setColor(picker.value);
+    } else {
+        alert("eraser on");
+      setEraser(true);
+      color = "black";
+    }
+  };
 
+  const  HandleSlider = event => {
+    lineWidth = lineWidth;
+    // alert(lineWidth);
+  };
 
 </script>
 
 
     <canvas 
+    bind:this={canvas}
     {width}
     {height}
-    id="canvas-element" width = "800" height = "600"></canvas>
+    id="canvas-element" 
+    on:mousedown={HandleMouseDown}
+    on:mousemove={HandleMouseMove}
+    on:mouseup={HandleMouseUp}
+    style="background: black;"
+    ></canvas>
+    <div id = "control1">
+        <input bind:value = {color} on:change = {HandleColor} id= "color-picker" type = "color"/>
+        <Clear on:message = {handleClearMessage} />
+        <Eraser on:message = {HandleEraseClick} /> 
+        <input bind:value = {lineWidth} on:change = {HandleSlider} id="width-slider" type = "range" min="1" max="10">
+    </div>
+    
+
+    <style>
+        #control1 {
+            justify-content: left;
+        }
+    </style>
